@@ -28,6 +28,8 @@ public:
         start = ends = -1;
         Qsize = 0;
     }
+   // TC --> O(1)
+    // SC --> O(N)
     void push(int num)
     {
         if(Qsize>=MAXSIZE)
@@ -51,6 +53,8 @@ public:
             }
         }
     }
+   // TC --> O(1)
+    // SC --> O(N)
     int pop()
     {
         if(Qsize == 0)
