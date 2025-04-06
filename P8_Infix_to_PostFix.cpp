@@ -4,6 +4,32 @@
 
 using namespace std;
 
+/*
+    s = a + b * ( c ^ d - e )
+    
+    character                   stack                                                   ans
+    a                                                                                   a
+    +                           +                                                       a
+    b                                                                                   ab
+    *                           + *                                                     ab
+    (                           + * (                                                   ab
+    c                                                                                   abc
+    ^                           + * ( ^                                                 abc
+    d                                                                                   abcd
+    -                           + * (    (pop all priority less than '-'                abcd^
+                                + * ( -
+    e
+    )                           Pop all till ')' 
+                                + *                                                    abcd^e -> abcd^e-
+                                
+   while(!stack.empty())  st = + *
+                                     
+    Pop all from stack and poplulate ans
+    ans = abcd^e-*+
+
+*/
+
+
 int priority(char ch)
 {
     if(ch == '^')
@@ -16,6 +42,8 @@ int priority(char ch)
         return -1;
 }
 
+// TC --> O(N) + O(N) for while loop
+// SC --> O(N) for stack + O(N) for ans Variable
 string findPostFix(string s)
 {
     int n = s.size();
