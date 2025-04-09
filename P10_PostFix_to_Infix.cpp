@@ -25,13 +25,13 @@ using namespace std;
     Hence Ans = ((A-B)/((D+E)*F))
 */
 
-string Convert_Prefix_to_Infix(string Prefix)
+string Convert_PostFix_to_Infix(string PostFix)
 {
     stack<string> St;
-    int n = Prefix.size();
+    int n = PostFix.size();
     for(int i=0;i<n;i++)
     {
-        char ch = Prefix[i];
+        char ch = PostFix[i];
         //cout << "ch=" << ch << endl;
         string str{ch};
         //cout << "str=" << str << endl;
@@ -68,18 +68,18 @@ string Convert_Prefix_to_Infix(string Prefix)
         infix = St.top();
         St.pop();
     }
-    
-    Or 
-*/    
+
+    Or
+*/
     string infix = St.top();
     return infix;
 }
 
 int main()
 {
-    string Prefix = "AB-DE+F*/";
+    string PostFix = "AB-DE+F*/";
 
-    string Infix = Convert_Prefix_to_Infix(Prefix);
+    string Infix = Convert_PostFix_to_Infix(PostFix);
 
     cout << "Infix=" << Infix << endl;
     return 0;
