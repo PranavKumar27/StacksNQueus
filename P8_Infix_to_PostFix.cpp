@@ -16,7 +16,7 @@ using namespace std;
     c                                                                                   abc
     ^                           + * ( ^                                                 abc
     d                                                                                   abcd
-    -                           + * (    (pop all priority less than '-'                abcd^
+    -                           + * (    pop all priority greater than '-'  > 1         abcd^
                                 + * ( -
     e
     )                           Pop all till ')' 
