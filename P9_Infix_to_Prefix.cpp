@@ -39,6 +39,7 @@ using namespace std;
  Infix => str = A+B^(C-D)*F
 
     Step 1: Reverse str
+
             F*(D-C)^B+A  Note Parenthesis is reversed
 
     Step 2: Perform Infix to PostFix
@@ -52,15 +53,15 @@ using namespace std;
             )                    *             FDC-
             ^                ^ *               FDC-
             B                ^ *               FDC-B
-            +                + ^ *             FDC-B
-            A                + ^ *             FDC-BA
-                               ^ *             FDC-BA+
-                                 *             FDC-BA+^
-                                               FDC-BA+^*
+            +                + *               FDC-B^
+                             +                 FDC-B^*
+            A                +                 FDC-B^*A
+                                               FDC-B^*A+
+
+
 
     Step 3: Reverse Str in step 2
-            *^+AB-CDF
-
+            +A*^B-CDF
 
 
 */
@@ -137,41 +138,48 @@ string findPostFix(string infix)
        char ch = infix[i];
        cout << " ch=" << ch << endl;
 
-       if( (ch>='A' && ch<='Z') ||
+       if( (ch>='A' && ch<='Z') ||  // For Operands
           (ch>='a' && ch<='z') ||
           (ch>='0' && ch<='9') )
        {
             PostFix=PostFix+ch;
        }
-       else if(ch=='(')
+       else if(ch=='(')  // For Open Parenthesis
        {
            St.push(ch);
        }
-       else if(ch==')')
+       else if(ch==')')  // For Closed Parenthesis
        {
-           while(St.top()!='(')
+           while(!St.empty() && St.top()!='(')
            {
                PostFix = PostFix + St.top();
                St.pop();
            }
           St.pop();
        }
-       else if(!St.empty() && ch=='^' && priority(ch)>=priority(St.top()))
+       else // For Operators
        {
-           PostFix = PostFix + St.top();
-           St.pop();
+           // Element at top of stack > New Element
+           if( ch=='^')
+           {
+               while(!St.empty() && priority(ch)<=priority(St.top()))
+               {
+                  PostFix = PostFix + St.top();
+                  St.pop();
+               }
+           }
+           else
+           {
+               while(!St.empty() && priority(ch)<priority(St.top()))
+               {
+                  PostFix = PostFix + St.top();
+                  St.pop();
+               }
+
+           }
            St.push(ch);
        }
-       else if(!St.empty() && priority(ch)<priority(St.top()))
-       {
-           PostFix = PostFix + St.top();
-           St.pop();
-           St.push(ch);
-       }
-       else
-       {
-           St.push(ch);
-       }
+
    }
 
    while(!St.empty())
