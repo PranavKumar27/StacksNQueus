@@ -73,17 +73,16 @@ string findPostFix(string s)
             St.pop();
         }
         // Operator
-        else if(!St.empty() && priority(ch)<=priority(St.top()))
-        {
-            char val = St.top();
-            St.pop();
-            ans = ans+val;
-            St.push(ch);
-        }
         else
         {
+            while(!St.empty() && priority(ch)<=priority(St.top()))
+            {
+                char val = St.top();
+                St.pop();
+                ans = ans+val;
+            }
             St.push(ch);
-        }
+        } 
     }
 
     while(!St.empty())
