@@ -61,13 +61,17 @@ string Convert_Prefix_to_Infix(string Prefix)
             St.push(Merge_str);
         }
     }
-
+/*
     string infix;
     if(!St.empty())
     {
         infix = St.top();
         St.pop();
     }
+    
+    Or 
+*/    
+    string infix = St.top();
     return infix;
 }
 
