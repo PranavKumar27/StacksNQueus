@@ -105,7 +105,8 @@ void find_Next_Greater_Elmnt_SOl1(vector<int>& Arr,vector<int>& NGE)
     }
 }
 
-// TC --> O(N)
+// TC --> O(2N) for using loop for and while, while loop at max runs N times in the entire For loop
+// SC --> O(N)+O(N) for Ans and Stack
 void find_Next_Greater_Elmnt_SOl2(vector<int>& Arr,vector<int>& NGE)
 {
     cout << __FUNCTION__ << endl;
@@ -116,31 +117,20 @@ void find_Next_Greater_Elmnt_SOl2(vector<int>& Arr,vector<int>& NGE)
     {
         int val = Arr[i];
         NGE[i]=-1;
-        if(St.empty())
+        while(!St.empty())
         {
-            St.push(Arr[i]);
+            int top = St.top();
+            if(top>val)
+            {
+                NGE[i] = top;
+                break;
+            }
+            else
+            {
+                St.pop();
+            }
         }
-        else
-        {
-           while(!St.empty())
-           {
-               int top = St.top();
-               if(top>val)
-               {
-                   NGE[i] = top;
-                   St.push(val);
-                   break;
-               }
-               else
-               {
-                   St.pop();
-               }
-           }
-           if(NGE[i]==-1) // If Not Top>Val Found Empty Stack But still Insert Current vale eg: val = 12
-           {
-               St.push(val);
-           }
-        }
+        St.push(val);
     }
 }
 
