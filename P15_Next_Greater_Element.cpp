@@ -38,13 +38,13 @@ using namespace std;
 
       in Arr = 4 12 5 3 1 2 5 3 1 2 4 6
                               ^
-               Next to 3 is 1 top of stack, So pop it , same way 2 pop
+               Next to 3 is 1 top of stack hwich is <3, So pop it , same way 2 pop
                So NGE of 3 is 4 top of stack
                Push 3 in Stack  {6,4,3}
 
       in Arr = 4 12 5 3 1 2 5 3 1 2 4 6
                             ^
-               Next to 5 is 3 top of stack, So pop it , same way 4 pop
+               Next to 5 is 3 top of stack which is <5, So pop it , same way 5<4 pop
                So NGE of 5 is 6 top of stack
                Push 5 in Stack  {6,5}
 
@@ -62,19 +62,19 @@ using namespace std;
 
        in Arr = 4 12 5 3 1 2 5 3 1 2 4 6
                        ^
-               Next to 3 is 1 top of stack, So pop it , same way 2 pop
+               Next to 3 is 1 top of stack which is <3, So pop it , same way 2 pop
                So NGE of 3 is 5 top of stack
                Push 3 in Stack  {6,5,3}
 
         in Arr = 4 12 5 3 1 2 5 3 1 2 4 6
                       ^
-               Next to 5 is 3 top of stack, So pop it , same way 5 pop
+               Next to 5 is 3 top of stack which is <5, So pop it , same way 5 pop
                So NGE of 3 is 6 top of stack
                Push 5 in Stack  {6,5}
 
         in Arr = 4 12 5 3 1 2 5 3 1 2 4 6
                     ^
-               Next to 12 is 5 top of stack, So pop it , same way 6 pop
+               Next to 12 is 5 top of stack which is <12, So pop it , same way 6 pop
                So NGE of 12 is -1
                Push 12 in Stack  {12}
 
