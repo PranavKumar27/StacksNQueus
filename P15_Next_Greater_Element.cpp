@@ -7,7 +7,7 @@ using namespace std;
 
 /*
     in Arr = 4 12 5 3 1 2 5 3 1 2 4 6
-    NGE    =12 -1 6 5 2 3 6 4 2 4 6 -1
+    NGE    =12 -1 6 5 2 5 6 4 2 4 6 -1
 
     Using For Loop = Sol1
     Using Stack = Sol 2: Monotonic Stack
