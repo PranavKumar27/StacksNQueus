@@ -115,22 +115,14 @@ void find_Next_Greater_Elmnt_SOl2(vector<int>& Arr,vector<int>& NGE)
     int n = Arr.size();
     for(int i=n-1;i>=0;i--)
     {
-        int val = Arr[i];
-        NGE[i]=-1;
-        while(!St.empty())
+        while( !St.empty() && St.top()<=Arr[i] ) // Step 1 Remove Smaller Elements
         {
-            int top = St.top();
-            if(top>val)
-            {
-                NGE[i] = top;
-                break;
-            }
-            else
-            {
-                St.pop();
-            }
+            St.pop();
         }
-        St.push(val);
+        
+        NGE[i] = (!St.empty())?St.top():-1; // Step 2 Assign NGE with top element or -1
+               
+        St.push(Arr[i]); // Step 3  Push the Current Value for next elements on left
     }
 }
 
