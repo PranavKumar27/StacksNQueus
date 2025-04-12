@@ -100,7 +100,7 @@ void findNextSmallerElement_Sol1(vector<int> Arr,vector<int>& NSE)
     }
 }
 
-// TC --> O(N)
+// TC --> O(2N) for pop N Max Element and N for loop
 // SC -> O(N)+O(N) for stack and NSE Array
 void findNextSmallerElement_Sol2(vector<int> Arr,vector<int>& NSE)
 {
