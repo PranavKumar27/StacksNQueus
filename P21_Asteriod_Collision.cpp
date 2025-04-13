@@ -62,6 +62,8 @@ void print_1D_v(vector<int> v)
                                                                                                                                                                                                                                                                                         
 */
 
+// TC --> O(N+N) for and while
+// SC--> O(N) for Stack
 void findAsteriod_that_Survived(vector<int> Arr,vector<int>& Ans)
 {
     cout << __FUNCTION__ << endl;
