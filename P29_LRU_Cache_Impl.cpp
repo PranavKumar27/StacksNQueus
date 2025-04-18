@@ -49,10 +49,13 @@ public:
         else
         {
             deque<Pi>::iterator addr = Mp[key];
+            int val = addr->second;
+            DQ.erase(addr);
             cout << "Key Asked=" << key << endl;
             cout << "Val Found=" << (addr->second) << endl;
-
-            return addr->second;
+            // Move to front via insert
+            put(key,val);
+            return val;
         }
 
 
