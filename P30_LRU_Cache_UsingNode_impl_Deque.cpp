@@ -1,149 +1,109 @@
 #include <iostream>
 #include <vector>
-#include <deque>
-#include <map>
+#include <unordered_map>
+
+// From GFG : https://www.geeksforgeeks.org/lru-cache-implementation-using-double-linked-lists/
 
 using namespace std;
 
-typedef pair<int,int> Pi;
-#define MAX_SIZE 4
-
-/*
-    Using a Deque Form a LRU Cache
-    Least Recently Used - Elements stay last
-    Size is fixed
-    The last access/inserted Node is at the front of deque
-*/
-class Node;
-map<int,Node*> Mp;
-
-
 class Node
 {
-    public:
+public:
     int key,val;
     Node* left;
     Node* right;
 
-
     Node()
     {
-
-    }
-    Node(int k,int v,Node* prev,Node* next)
-    {
-        key=k;
-        val =v;
-        left = prev;
-        right = next;
+        left=right=nullptr;
     }
     Node(int k,int v)
     {
-        key = k;
-        val = v;
-        left = right = nullptr;
+        key=k;
+        val=v;
+        left=right=nullptr;
     }
-    Node* put(Node* head,int key,int val) // Insert front
+};
+
+class LRUCache
+{
+    Node* head;
+    Node* tail;
+    int capacity;
+    unordered_map<int,Node*> Cache_Map;
+public:
+    LRUCache(int cap)
     {
-
-        cout << "head addr=" << head << endl;
-        auto itr = Mp.find(key);
-        if(itr==Mp.end())
-        {
-            cout << "Key Not Found in MAP and Hence Insert New Key,Val Pair" << endl;
-            Node* newNode = new Node(key,val,nullptr,head);
-            cout << "newNode addr=" << newNode << endl;
-            if(head!=nullptr)
-                head->left = newNode;
-            head = newNode;
-            cout << "head addr=" << head << endl;
-            Mp[key] = newNode;
-            cout << "Insert in Map key = " << key << " Size of Map=" << Mp.size() << endl;
-            cout << "Insert at Front Done" << endl;
-
-        }
-        else
-        {
-            cout << "Key Found in MAP and Hence Just Update Old Key with New Value" << endl;
-            Node* it= Mp[key];
-            it->val = val;
-            cout << "Val Updated as val=" << it->val << endl;
-        }
-
-        return head;
+        head = new Node(-1,-1);
+        tail = new Node(-1,-1);
+        head->right = tail;
+        head->left = nullptr;
+        tail->left = head;
+        tail->right = nullptr;
+        capacity = cap;
     }
-
-    Node* get(Node* head,int key)
-    {
-
-        auto itr = Mp.find(key);
-        int val=-1;
-        if(itr==Mp.end())
-        {
-           cout << "Key Not Found in MAP" << endl;
-           return nullptr;
-        }
-        else
-        {
-            Node* it= Mp[key];
-            val = it->val;
-            Node*temp = head;
-            while(temp!=nullptr)
-            {
-                if(temp==it)
-                {
-                    break;
-                }
-
-                else
-                    temp = temp->right;
-            }
-            if(temp!=nullptr)
-            {
-                Node* next = temp->right;
-                Node* prev = temp->left;
-
-                if(prev!=nullptr)
-                    prev->right = next;
-                if(next!=nullptr)
-                    next->left = prev;
-
-                temp->right=head;
-                temp->left = nullptr;
-
-                head = temp;
-            }
-        }
-        return head;
-    }
-    Node* del(Node* head)
+    void add(Node* node)
     {
         cout << __FUNCTION__ << endl;
-        Node* temp = head;
-        while(temp!=nullptr && temp->right!=nullptr)
+        Node* nextNode = head->right;
+        head->right = node;
+        node->left = head;
+        node->right = nextNode;
+        nextNode->left = node;
+        cout << "END of add" << endl;
+    }
+    void removeNode(Node* node)
+    {
+        Node* prev = node->left;
+        Node* next = node->right;
+
+        prev->right = next;
+        next->left = prev;
+    }
+
+    int get(int key)
+    {
+        if(Cache_Map.find(key)==Cache_Map.end()) // Element Not Found
         {
-            temp = temp->right;
+            return -1;
         }
-        if(temp!=nullptr)
+        Node* node = Cache_Map[key];
+        int val = node->val;
+        removeNode(node);
+        add(node);
+        return val;
+    }
+    void put(int key,int val)
+    {
+        cout << __FUNCTION__ << endl;
+        if(Cache_Map.find(key)!=Cache_Map.end())
         {
-            Node* prev = temp->left;
-            prev->right = nullptr;
-            delete(temp);
-            return head;
-        }
-        else
-        {
-            return nullptr;
+            cout << "Inside If" << endl;
+            Node* Oldnode = Cache_Map[key];
+            removeNode(Oldnode);
+            delete(Oldnode);
         }
 
+        Node* newNode = new Node(key,val);
+        add(newNode);
+        Cache_Map[key] = newNode;
+
+        if(Cache_Map.size()>capacity)
+        {
+            Node* DeleteNode = tail->left;
+            int oldkey = DeleteNode->key;
+            cout << "Before Map size=" << Cache_Map.size() << endl;
+            Cache_Map.erase(Cache_Map.find(oldkey));
+            cout << "After Map size=" << Cache_Map.size() << endl;
+            removeNode(DeleteNode);
+            delete(DeleteNode);
+        }
 
     }
-    void print_DeQue(Node* head)
+    void print_DeQue()
     {
-        cout << "head in Node Class =" << __FUNCTION__ << "  " <<  head << endl;
-
         cout << __FUNCTION__ << endl;
-        Node* temp = head;
+        Node* temp = head->right;
         while(temp!=nullptr)
         {
             cout << "key=" << temp->key << " val=" << temp->val << endl;
@@ -151,69 +111,11 @@ class Node
         }
     }
 
-
-};
-
-class LRU
-{
-public:
-    Node*head;
-    int sz;
-    LRU()
-    {
-        Node* head=nullptr;
-        cout << "head in LRU =" << __FUNCTION__ << "  " <<  head << endl;
-        sz=0;
-
-    }
-    void put(int key,int val)
-    {
-        cout << "head in LRU =" << __FUNCTION__ << "  " <<  head << endl;
-
-        if(sz<MAX_SIZE-1 && head!=nullptr)
-        {
-            cout << "head in LRU =" << head << endl;
-            // Check if already existing in the Map then update the key with diff val
-            head = head->put(head,key,val);
-            sz++;
-        }
-        else if(head!=nullptr)
-        {
-            cout << "else called" << endl;
-            head = head->del(head);
-            head = head->put(head,key,val);
-        }
-    }
-    int get(int key)
-    {
-        cout << "head in LRU =" << __FUNCTION__ << "  " <<  head << endl;
-
-        if(head!=nullptr)
-        {
-            head = head->get(head,key);
-            return head->val;
-        }
-        else
-        {
-            cout << "Key Not Found and head is NULL" << endl;
-            return -1;
-        }
-
-    }
-    void printLRU()
-    {
-        cout << "head in LRU =" << __FUNCTION__ << "  " <<  head << endl;
-        if(head!=nullptr)
-            head->print_DeQue(head);
-    }
 };
 
 int main()
 {
-    cout << "LRU Cache Least Recently Used at last" << endl;
-    LRU Cache;
-    //Cache.printLRU();
-    //Cache.get(1);
+    LRUCache Cache(2);
     int input;
 
     do
@@ -229,14 +131,14 @@ int main()
                     cout << "Enter value " << endl;
                     cin >> val;
                     Cache.put(key,val);
-                    Cache.printLRU();
+                    Cache.print_DeQue();
                     break;
             case 2:
                     cout << "Enter key " << endl;
                     cin >> key;
                     val = Cache.get(key);
                     cout << "val=" << val << endl;
-                    Cache.printLRU();
+                    Cache.print_DeQue();
                     break;
             case 3:return 0;
             default:break;
@@ -245,6 +147,6 @@ int main()
 
 
     }while(input!=0);
-
+    cout << "Hello world!" << endl;
     return 0;
 }
