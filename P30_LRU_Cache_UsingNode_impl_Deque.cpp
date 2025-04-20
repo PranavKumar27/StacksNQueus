@@ -6,6 +6,14 @@
 
 using namespace std;
 
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+
+// From GFG : https://www.geeksforgeeks.org/lru-cache-implementation-using-double-linked-lists/
+
+using namespace std;
+
 class Node
 {
 public:
@@ -37,20 +45,16 @@ public:
         head = new Node(-1,-1);
         tail = new Node(-1,-1);
         head->right = tail;
-        head->left = nullptr;
         tail->left = head;
-        tail->right = nullptr;
         capacity = cap;
     }
     void add(Node* node)
     {
-        cout << __FUNCTION__ << endl;
         Node* nextNode = head->right;
         head->right = node;
         node->left = head;
         node->right = nextNode;
         nextNode->left = node;
-        cout << "END of add" << endl;
     }
     void removeNode(Node* node)
     {
@@ -67,21 +71,18 @@ public:
         {
             return -1;
         }
-        Node* node = Cache_Map[key];
-        int val = node->val;
+        Node* node = Cache_Map[key]; 
         removeNode(node);
         add(node);
-        return val;
+        return node->val;
     }
     void put(int key,int val)
     {
-        cout << __FUNCTION__ << endl;
         if(Cache_Map.find(key)!=Cache_Map.end())
         {
-            cout << "Inside If" << endl;
             Node* Oldnode = Cache_Map[key];
             removeNode(Oldnode);
-            delete(Oldnode);
+            delete Oldnode;
         }
 
         Node* newNode = new Node(key,val);
@@ -92,15 +93,15 @@ public:
         {
             Node* DeleteNode = tail->left;
             int oldkey = DeleteNode->key;
-            cout << "Before Map size=" << Cache_Map.size() << endl;
-            Cache_Map.erase(Cache_Map.find(oldkey));
-            cout << "After Map size=" << Cache_Map.size() << endl;
+            //cout << "Before Map size=" << Cache_Map.size() << endl;
             removeNode(DeleteNode);
-            delete(DeleteNode);
+            Cache_Map.erase(oldkey);
+            //cout << "After Map size=" << Cache_Map.size() << endl;
+            delete DeleteNode;
         }
 
     }
-    void print_DeQue()
+void print_DeQue()
     {
         cout << __FUNCTION__ << endl;
         Node* temp = head->right;
@@ -112,6 +113,9 @@ public:
     }
 
 };
+    
+
+
 
 int main()
 {
